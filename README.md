@@ -1,2 +1,4 @@
 # python-curse-UFSC
- Oriented object programming python by federal university of santa catarina
+ Some exercices from oriented object programming course.
+ 
+ This course is given by the department of informatics and statistics at UFSC university
