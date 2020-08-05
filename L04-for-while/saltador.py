@@ -13,13 +13,17 @@ def medias_dos_atletas(qtd_atletas):
 
 
 def vencedor(medias):
-    maior_media = 0
-    vencedor = ''
-    for atleta, media in medias.items():
-        if media > maior_media:
-            maior_media = media
-            vencedor = atleta
-    return vencedor
+    ranking = sorted(medias, key=medias.get, reverse=True)
+    return ranking[0]
+
+# def vencedor(medias):
+#     maior_media = 0
+#     vencedor = ''
+#     for atleta, media in medias.items():
+#         if media > maior_media:
+#             maior_media = media
+#             vencedor = atleta
+#     return vencedor
 
 
 qtd_atletas = int(input('Numero de atletas: '))
