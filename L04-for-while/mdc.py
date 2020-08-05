@@ -19,16 +19,28 @@ def mdc(n1, n2):
     divisores_comuns = []
     mdc = 1
     for divisor in divisores:
-        while n1 % divisor == 0 and n2 % divisor == 0:
-            mdc *= divisor
-            divisores_comuns.append(divisor)
-            n1 /= divisor
-            n2 /= divisor
+        while n1 % divisor == 0 or n2 % divisor == 0:
+            if n1 % divisor == 0 and n2 % divisor == 0:
+                mdc *= divisor
+                divisores_comuns.append(divisor)
+                n1 /= divisor
+                n2 /= divisor
 
     return mdc, divisores_comuns
+
+
+def metodo_euclides(n1, n2):
+    while True:
+        resto = n1 % n2
+        n1 = n2
+        n2 = resto
+        if resto == 0:
+            return n1
+
 
 n1 = int(input('n1: '))
 n2 = int(input('n2: '))
 mdc, divisores_comuns = mdc(n1, n2)
 print('divisores comuns: ', divisores_comuns)
-print('mdc: ', mdc)
+print('Normal: ', mdc)
+print('Normal: ', metodo_euclides(n2, n1))
