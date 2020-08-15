@@ -9,6 +9,9 @@ class Banco:
         self.__numero = codigo_banco
         self.__fichario = {}
         self.__ultima_conta_criada = 0
+
+    def get_nome(self):
+        return self.__nome[:]
         
     def abre_conta(self, nome_cliente, cpf_cliente):
         ''' Abre uma nova conta no banco '''
@@ -20,8 +23,10 @@ class Banco:
         ficha.set_nome(nome_cliente)
         ficha.set_cpf(cpf_cliente)
         self.__fichario[self.__ultima_conta_criada] = ficha
-        return self.__ultima_conta_criada
-        
+        # return self.__ultima_conta_criada # nesse ponto não está sendo desprotegido o atributo do banco?
+        self.__ultima_conta_criada
+        return True, ficha.get_nome(), ficha.get_numero()
+
     def deposito(self, numero_conta, valor):
         ''' Realiza um depósito numa conta '''
         
@@ -44,11 +49,17 @@ class Banco:
         ''' Realiza transferência entre duas contas '''
         
         if nct_origem in self.__fichario and nct_destino in self.__fichario:
-            self.__fichario[nct_origem].debite(valor)
-            self.__fichario[nct_destino].credite(valor)
-            return True
+            ficha_origem = self.__fichario[nct_origem]
+            ficha_destino = self.__fichario[nct_destino]
+
+            ficha_origem.debite(valor)
+            ficha_destino.credite(valor)
+
+            msg = f"Transferencia realizada com sucesso: R${valor} de {ficha_origem.get_nome()} para {ficha_destino.get_nome()}"
+
+            return True, msg
         else:
-            return False
+            return False, "Falha na transferencia"
 
     def saldo(self, numero_conta):       
         ''' Obtém o saldo de uma conta '''
@@ -59,18 +70,19 @@ class Banco:
             return False
 
     def verifica_situacao(self, numero_conta):
+        nome = self.__fichario[numero_conta].get_nome()
         situacao = self.__fichario[numero_conta].get_situacao()
         saldo = self.saldo(numero_conta)
-        return situacao, saldo
+        return nome, situacao, saldo
 
     def encerra_conta(self, numero_conta):
         ''' Encerra uma conta '''
         
         if numero_conta in self.__fichario and self.saldo(numero_conta) == 0:
             self.__fichario[numero_conta].set_situacao('desativada')
-            return True
+            return True, f"Conta {numero_conta} desativada com sucesso"
         else:
-            return False
+            return False, f"Não foi possivel encerrar a conta {numero_conta}"
         
     def conta_maior_saldo(self):
         '''Obtém o nº da conta do cliente com maior saldo'''

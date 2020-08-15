@@ -8,10 +8,10 @@ class FichaBancaria:
         self.__situacao = 'ativada'
     
     def get_numero(self):
-        return self.__numero
+        return self.__numero # nesse ponto não está sendo desprotegido o atributo da ficha?
     
     def get_nome(self):
-        return self.__nome
+        return self.__nome[:]
     
     def get_cpf(self):
         return self.__cpf
@@ -20,7 +20,7 @@ class FichaBancaria:
         return self.__saldo
 
     def get_situacao(self):
-        return self.__situacao
+        return self.__situacao[:]
     
     def set_numero(self, numero_conta):
         self.__numero = numero_conta

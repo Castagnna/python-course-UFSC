@@ -1,49 +1,65 @@
 import banco as B
 import caixa_eletronico as cx
 
-bc = B.Banco("Meu Primeiro Banco", 999)
-num_cta_joaozinho = bc.abre_conta('Joazinho', 123)
-print(num_cta_joaozinho)
+# Criando banco
 
-num_cta_mariazinha = bc.abre_conta('Mariazinha', 456)
-print(num_cta_mariazinha)
+itopobre = B.Banco("Banco Itopobre", 999)
+print(f"{itopobre.get_nome()} criado com sucesso")
 
-bc.deposito(num_cta_joaozinho, 100)
-bc.deposito(num_cta_mariazinha, 250)
-bc.saque(num_cta_joaozinho, 50)
-bc.transferencia(num_cta_mariazinha, num_cta_joaozinho, 20)
+# Operações feitas no banco
 
-sit_m, saldo_m = bc.verifica_situacao(num_cta_mariazinha)
-print(sit_m, saldo_m)
+status_da_operacao, nome, numero = itopobre.abre_conta('Joao Manoel', 123)
+print(f"{nome}, conta N° {numero} criada com sucesso" if status_da_operacao else "falha na operacao")
 
-saldo = bc.saldo(num_cta_joaozinho)
-if saldo == False:
-    print("Conta inexistente")
-else:
-    print(f"Saldo joao {num_cta_joaozinho} = {saldo}")
-    
-print(f"Saldo da conta {num_cta_mariazinha} = {bc.saldo(num_cta_mariazinha)}")
+status_da_operacao, nome, numero = itopobre.abre_conta('Maria Cristina', 456)
+print(f"{nome}, conta N° {numero} criada com sucesso" if status_da_operacao else "falha na operacao")
 
-n_conta = 789
-print(f"Saldo da conta {n_conta} = {bc.saldo(n_conta)}")
+status_da_operacao, nome, numero = itopobre.abre_conta('O Cão', 666)
+print(f"{nome}, conta N° {numero} criada com sucesso" if status_da_operacao else "falha na operacao")
 
-print(bc.encerra_conta(num_cta_mariazinha))
+itopobre.deposito(numero_conta=1, valor=100)
+itopobre.deposito(numero_conta=2, valor=250)
+itopobre.deposito(numero_conta=3, valor=1000)
+itopobre.saque(numero_conta=1, valor=50)
 
-sit_m, saldo_m = bc.verifica_situacao(num_cta_mariazinha)
-print(sit_m, saldo_m)
+status_da_operacao, msg = itopobre.transferencia(nct_origem=2, nct_destino=1, valor=20)
+print(msg)
 
-bc.saque(num_cta_mariazinha, saldo_m)
-print(bc.encerra_conta(num_cta_mariazinha))
+saldo = itopobre.saldo(numero_conta=1)
+print(f"Saldo: R$ {saldo}" if saldo else "Falha na operação")
 
-sit_m, saldo_m = bc.verifica_situacao(num_cta_mariazinha)
-print(sit_m, saldo_m)
+saldo = itopobre.saldo(numero_conta=999)
+print(f"Saldo: R$ {saldo}" if saldo else "Falha na operação saldo")
 
-caixa01 = cx.CaixaEletronico(bc, 1)
+nome, sit, saldo = itopobre.verifica_situacao(numero_conta=1)
+print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
 
-caixa01.cx_saque(num_cta_joaozinho, 10)
-sit_j, saldo_j = bc.verifica_situacao(num_cta_joaozinho)
-print(f"joao, conta: {num_cta_joaozinho}, saldo: {saldo_j}, situacao:{sit_j}")
+status_da_operacao, msg = itopobre.encerra_conta(numero_conta=2)
+print(msg)
 
-bc.saque(num_cta_joaozinho, 20)
-sit_j, saldo_j = bc.verifica_situacao(num_cta_joaozinho)
-print(f"joao, conta: {num_cta_joaozinho}, saldo: {saldo_j}, situacao:{sit_j}")
+nome, sit, saldo = itopobre.verifica_situacao(numero_conta=2)
+print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
+
+itopobre.saque(numero_conta=2, valor=saldo)
+status_da_operacao, msg = itopobre.encerra_conta(numero_conta=2)
+print(msg)
+
+nome, sit_m, saldo_m = itopobre.verifica_situacao(numero_conta=2)
+print(f"Situação da conta de {nome}: {sit_m}, saldo: R$ {saldo_m}")
+
+# Operações feitas no caixa eletronico
+
+caixa_eletronico = cx.CaixaEletronico(itopobre, 1)
+
+caixa_eletronico.cx_saque(numero_conta=1, valor=10)
+nome, sit_m, saldo_m = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
+print(f"Situação da conta de {nome}: {sit_m}, saldo: R$ {saldo_m}")
+
+caixa_eletronico.cx_deposito(numero_conta=1, valor=20)
+nome, sit_m, saldo_m = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
+print(f"Situação da conta de {nome}: {sit_m}, saldo: R$ {saldo_m}")
+
+status_da_operacao, msg = caixa_eletronico.cx_transferencia(nct_origem=3, nct_destino=1, valor=400)
+print(msg)
+nome, sit_m, saldo_m = caixa_eletronico.cx_verifica_situacao(numero_conta=3)
+print(f"Situação da conta de {nome}: {sit_m}, saldo: R$ {saldo_m}")
