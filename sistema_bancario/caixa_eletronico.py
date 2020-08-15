@@ -5,10 +5,10 @@ class CaixaEletronico:
     def __init__(self, banco, codigo_do_caixa, qtd_de_cada_cedula=5):
         self.__banco = banco
         self.__codigo = codigo_do_caixa
-        self.__qtd_cedulas = [qtd_de_cada_cedula] * len(self.cedulas)
+        self.__qtd_cedulas_do_caixa = [qtd_de_cada_cedula] * len(self.cedulas)
 
     def get_situacao_do_caixa(self):
-        return [[cedula, qtd] for cedula, qtd in zip(self.cedulas, self.__qtd_cedulas)]
+        return [[cedula, qtd] for cedula, qtd in zip(self.cedulas, self.__qtd_cedulas_do_caixa)]
 
     def cx_saque(self, numero_conta, valor):
         return self.__banco.saque(numero_conta, valor)
@@ -36,7 +36,8 @@ class CaixaEletronico:
 
             for i in range(qtd_cedulas_distintas - 1, -1, -1):
 
-                qtd_de_cedulas_do_saque[i] = int(min(valor // self.cedulas[i], self.__qtd_cedulas[i]))
+                qtd_de_cedulas_do_saque[i] = int(min(valor // self.cedulas[i], self.__qtd_cedulas_do_caixa[i]))
+                self.__qtd_cedulas_do_caixa[i] -= qtd_de_cedulas_do_saque[i]
                 valor -= self.cedulas[i] * qtd_de_cedulas_do_saque[i]
 
             return True, [[cedula, qtd] for cedula, qtd in zip(self.cedulas, qtd_de_cedulas_do_saque)]

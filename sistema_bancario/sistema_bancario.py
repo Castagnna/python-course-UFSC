@@ -52,7 +52,7 @@ print(f"Situação da conta de {nome}: {sit_m}, saldo: R$ {saldo_m}")
 caixa_eletronico = CaixaEletronico(itopobre, 1)
 
 situacao_do_caixa = caixa_eletronico.get_situacao_do_caixa()
-print(situacao_do_caixa)
+print(f"situacao do caixa: {situacao_do_caixa}")
 
 caixa_eletronico.cx_saque(numero_conta=1, valor=10)
 nome, sit, saldo = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
@@ -81,3 +81,6 @@ print(f"Saque: {saque}" if status_da_operacao else "Falha no saque")
 
 nome, sit, saldo = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
 print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
+
+situacao_do_caixa = caixa_eletronico.get_situacao_do_caixa()
+print(f"situacao do caixa: {situacao_do_caixa}")
