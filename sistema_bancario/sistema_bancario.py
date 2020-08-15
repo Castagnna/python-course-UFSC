@@ -1,4 +1,5 @@
 import banco as B
+import caixa_eletronico as cx
 
 bc = B.Banco("Meu Primeiro Banco", 999)
 num_cta_joaozinho = bc.abre_conta('Joazinho', 123)
@@ -19,7 +20,7 @@ saldo = bc.saldo(num_cta_joaozinho)
 if saldo == False:
     print("Conta inexistente")
 else:
-    print(f"Saldo da conta {num_cta_joaozinho} = {saldo}")
+    print(f"Saldo joao {num_cta_joaozinho} = {saldo}")
     
 print(f"Saldo da conta {num_cta_mariazinha} = {bc.saldo(num_cta_mariazinha)}")
 
@@ -36,3 +37,13 @@ print(bc.encerra_conta(num_cta_mariazinha))
 
 sit_m, saldo_m = bc.verifica_situacao(num_cta_mariazinha)
 print(sit_m, saldo_m)
+
+caixa01 = cx.CaixaEletronico(bc, 1)
+
+caixa01.cx_saque(num_cta_joaozinho, 10)
+sit_j, saldo_j = bc.verifica_situacao(num_cta_joaozinho)
+print(f"joao, conta: {num_cta_joaozinho}, saldo: {saldo_j}, situacao:{sit_j}")
+
+bc.saque(num_cta_joaozinho, 20)
+sit_j, saldo_j = bc.verifica_situacao(num_cta_joaozinho)
+print(f"joao, conta: {num_cta_joaozinho}, saldo: {saldo_j}, situacao:{sit_j}")
