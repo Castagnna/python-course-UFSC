@@ -55,14 +55,29 @@ situacao_do_caixa = caixa_eletronico.get_situacao_do_caixa()
 print(situacao_do_caixa)
 
 caixa_eletronico.cx_saque(numero_conta=1, valor=10)
-nome, sit_m, saldo_m = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
-print(f"Situação da conta de {nome}: {sit_m}, saldo: R$ {saldo_m}")
+nome, sit, saldo = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
+print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
 
 caixa_eletronico.cx_deposito(numero_conta=1, valor=20)
-nome, sit_m, saldo_m = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
-print(f"Situação da conta de {nome}: {sit_m}, saldo: R$ {saldo_m}")
+nome, sit, saldo = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
+print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
 
 status_da_operacao, msg = caixa_eletronico.cx_transferencia(nct_origem=3, nct_destino=1, valor=400)
 print(msg)
-nome, sit_m, saldo_m = caixa_eletronico.cx_verifica_situacao(numero_conta=3)
-print(f"Situação da conta de {nome}: {sit_m}, saldo: R$ {saldo_m}")
+nome, sit, saldo = caixa_eletronico.cx_verifica_situacao(numero_conta=3)
+print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
+
+nome, sit, saldo = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
+print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
+
+status_da_operacao, saque = caixa_eletronico.cx_saque_de_cedulas(numero_conta=1, valor=177)
+print(f"Saque: {saque}" if status_da_operacao else "Falha no saque")
+
+nome, sit, saldo = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
+print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
+
+status_da_operacao, saque = caixa_eletronico.cx_saque_de_cedulas(numero_conta=1, valor=399)
+print(f"Saque: {saque}" if status_da_operacao else "Falha no saque")
+
+nome, sit, saldo = caixa_eletronico.cx_verifica_situacao(numero_conta=1)
+print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")

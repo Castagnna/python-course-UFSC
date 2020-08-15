@@ -26,20 +26,20 @@ class CaixaEletronico:
         return self.__banco.saldo(numero_conta)
 
     def cx_saque_de_cedulas(self, numero_conta, valor):
-        num_valores = int(input())
 
-        valores = [0] * num_valores
-        quantidades = [0] * num_valores
-        qtdade_notas = [0] * num_valores
+        status_da_operacao = self.__banco.saque(numero_conta, valor)
 
-        for i in range(num_valores):
-            valores[i] = float(input())
-            quantidades[i] = int(input())
+        qtd_cedulas_distintas = len(self.cedulas)
 
-        montante = float(input())
-        for i in range(num_valores - 1, -1, -1):
-            # interessante essa instrucao
-            qtdade_notas[i] = int(min(montante // valores[i], quantidades[i]))
-            montante -= valores[i] * qtdade_notas[i]
+        if status_da_operacao:
+            qtd_de_cedulas_do_saque = [0] * qtd_cedulas_distintas
 
-        print(' '.join([str(x) for x in qtdade_notas]))
+            for i in range(qtd_cedulas_distintas - 1, -1, -1):
+
+                qtd_de_cedulas_do_saque[i] = int(min(valor // self.cedulas[i], self.__qtd_cedulas[i]))
+                valor -= self.cedulas[i] * qtd_de_cedulas_do_saque[i]
+
+            return True, [[cedula, qtd] for cedula, qtd in zip(self.cedulas, qtd_de_cedulas_do_saque)]
+
+        else:
+            return False, [None]
