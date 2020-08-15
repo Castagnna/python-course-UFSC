@@ -1,9 +1,9 @@
-import banco as B
-import caixa_eletronico as cx
+from banco import Banco
+from caixa_eletronico import CaixaEletronico
 
 # Criando banco
 
-itopobre = B.Banco("Banco Itopobre", 999)
+itopobre = Banco("Banco Itopobre", 999)
 print(f"{itopobre.get_nome()} criado com sucesso")
 
 # Operações feitas no banco
@@ -49,7 +49,10 @@ print(f"Situação da conta de {nome}: {sit_m}, saldo: R$ {saldo_m}")
 
 # Operações feitas no caixa eletronico
 
-caixa_eletronico = cx.CaixaEletronico(itopobre, 1)
+caixa_eletronico = CaixaEletronico(itopobre, 1)
+
+situacao_do_caixa = caixa_eletronico.get_situacao_do_caixa()
+print(situacao_do_caixa)
 
 caixa_eletronico.cx_saque(numero_conta=1, valor=10)
 nome, sit_m, saldo_m = caixa_eletronico.cx_verifica_situacao(numero_conta=1)

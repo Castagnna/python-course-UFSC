@@ -1,8 +1,14 @@
 class CaixaEletronico:
 
-    def __init__(self, banco, codigo_do_caixa):
+    cedulas = [2, 5, 10, 20, 50, 100]
+
+    def __init__(self, banco, codigo_do_caixa, qtd_de_cada_cedula=5):
         self.__banco = banco
         self.__codigo = codigo_do_caixa
+        self.__qtd_cedulas = [qtd_de_cada_cedula] * len(self.cedulas)
+
+    def get_situacao_do_caixa(self):
+        return [[cedula, qtd] for cedula, qtd in zip(self.cedulas, self.__qtd_cedulas)]
 
     def cx_saque(self, numero_conta, valor):
         return self.__banco.saque(numero_conta, valor)
@@ -15,3 +21,25 @@ class CaixaEletronico:
 
     def cx_transferencia(self, nct_origem, nct_destino, valor):
         return self.__banco.transferencia(nct_origem, nct_destino, valor)
+
+    def cx_saldo(self, numero_conta):
+        return self.__banco.saldo(numero_conta)
+
+    def cx_saque_de_cedulas(self, numero_conta, valor):
+        num_valores = int(input())
+
+        valores = [0] * num_valores
+        quantidades = [0] * num_valores
+        qtdade_notas = [0] * num_valores
+
+        for i in range(num_valores):
+            valores[i] = float(input())
+            quantidades[i] = int(input())
+
+        montante = float(input())
+        for i in range(num_valores - 1, -1, -1):
+            # interessante essa instrucao
+            qtdade_notas[i] = int(min(montante // valores[i], quantidades[i]))
+            montante -= valores[i] * qtdade_notas[i]
+
+        print(' '.join([str(x) for x in qtdade_notas]))

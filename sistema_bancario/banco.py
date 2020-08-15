@@ -1,6 +1,6 @@
 import math
-# from ficha_bancaria import FichaBancaria
-import ficha_bancaria as F
+from ficha_bancaria import FichaBancaria
+
 
 class Banco:
     
@@ -18,7 +18,7 @@ class Banco:
         
         self.__ultima_conta_criada += 1
         
-        ficha = F.FichaBancaria()
+        ficha = FichaBancaria()
         ficha.set_numero(self.__ultima_conta_criada)
         ficha.set_nome(nome_cliente)
         ficha.set_cpf(cpf_cliente)
