@@ -1,46 +1,62 @@
 class CaixaEletronico:
 
-    cedulas = [2, 5, 10, 20, 50, 100]
-
-    def __init__(self, banco, codigo_do_caixa, qtd_de_cada_cedula=5):
+    def __init__(self, banco, codigo_do_caixa):
         self.__banco = banco
         self.__codigo = codigo_do_caixa
-        self.__qtd_cedulas_do_caixa = [qtd_de_cada_cedula] * len(self.cedulas)
+        self.__cedulas_e_qtd = {}
 
-    def get_situacao_do_caixa(self):
-        return [[cedula, qtd] for cedula, qtd in zip(self.cedulas, self.__qtd_cedulas_do_caixa)]
+    def abastece_o_caixa(self, cedulas_quantidades):
 
-    def cx_saque(self, numero_conta, valor):
+        if not isinstance(cedulas_quantidades, dict):
+            return False, "Falha, dados de entrada não são do tipo dicionario"
+
+        for cedula, qtd in cedulas_quantidades.items():
+            if cedula in self.__cedulas_e_qtd:
+                self.__cedulas_e_qtd[cedula] += qtd
+            else:
+                self.__cedulas_e_qtd[cedula] = qtd
+
+        return True, "Caixa abastecido"
+
+    def mostra_cedulas_e_quantidades(self):
+        return [[cedula, self.__cedulas_e_qtd[cedula]] for cedula in sorted(self.__cedulas_e_qtd.keys())]
+
+    def saque(self, numero_conta, valor):  # retirar o cx da frente do saque
         return self.__banco.saque(numero_conta, valor)
 
-    def cx_deposito(self, numero_conta, valor):
+    def deposito(self, numero_conta, valor):
         return self.__banco.deposito(numero_conta, valor)
 
-    def cx_verifica_situacao(self, numero_conta):
-        return self.__banco.verifica_situacao(numero_conta)
+    def mostra_situacao_da_conta(self, numero_conta):
+        return self.__banco.mostra_situacao_da_conta(numero_conta)
 
-    def cx_transferencia(self, nct_origem, nct_destino, valor):
+    def transferencia(self, nct_origem, nct_destino, valor):
         return self.__banco.transferencia(nct_origem, nct_destino, valor)
 
-    def cx_saldo(self, numero_conta):
+    def saldo(self, numero_conta):
         return self.__banco.saldo(numero_conta)
 
-    def cx_saque_de_cedulas(self, numero_conta, valor):
+    def verifica_cedulas_para_o_saque(self, valor):
+        return True
 
-        status_da_operacao = self.__banco.saque(numero_conta, valor)
+    def saque_de_cedulas(self, numero_conta, valor):
 
-        qtd_cedulas_distintas = len(self.cedulas)
+        if not self.verifica_cedulas_para_o_saque(valor):
+            return False, "Quantidade de cedulas insuficiente para o saque"
 
-        if status_da_operacao:
-            qtd_de_cedulas_do_saque = [0] * qtd_cedulas_distintas
+        if self.saldo(numero_conta) < valor:
+            return False, "Saldo insuficiente"
 
-            for i in range(qtd_cedulas_distintas - 1, -1, -1):
+        self.__banco.saque(numero_conta, valor)
 
-                qtd_de_cedulas_do_saque[i] = int(min(valor // self.cedulas[i], self.__qtd_cedulas_do_caixa[i]))
-                self.__qtd_cedulas_do_caixa[i] -= qtd_de_cedulas_do_saque[i]
-                valor -= self.cedulas[i] * qtd_de_cedulas_do_saque[i]
+        qtd_cedulas_distintas = len(self.__cedulas)
 
-            return True, [[cedula, qtd] for cedula, qtd in zip(self.cedulas, qtd_de_cedulas_do_saque)]
+        qtd_de_cedulas_do_saque = [0] * qtd_cedulas_distintas
 
-        else:
-            return False, [None]
+        for i in range(qtd_cedulas_distintas - 1, -1, -1):
+            qtd_de_cedulas_do_saque[i] = int(min(valor // self.__cedulas[i], self.__qtd_de_cada_cedula_do_caixa[i]))
+            self.__qtd_de_cada_cedula_do_caixa[i] -= qtd_de_cedulas_do_saque[i]
+            valor -= self.__cedulas[i] * qtd_de_cedulas_do_saque[i]
+
+        return True, [[cedula, qtd] for cedula, qtd in zip(self.__cedulas, qtd_de_cedulas_do_saque) if qtd > 0]
+

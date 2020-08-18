@@ -37,5 +37,10 @@
 # str_list = [str(cedulas_do_saque[cedula]) for cedula in sorted(cedulas_do_saque.keys())]
 # print(' '.join(str_list))
 
-for cedula, qtd in zip(['A', 'B', 'C'], [1, 2, 3]):
-    print(cedula, qtd)
+# for cedula, qtd in zip(['A', 'B', 'C'], [1, 2, 3]):
+#     print(cedula, qtd)
+a = [9, 7, 11, 99]
+
+print(a.index(99))
+(a.append(13)).sort()
+print(a)

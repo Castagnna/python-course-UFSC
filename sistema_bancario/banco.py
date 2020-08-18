@@ -23,8 +23,7 @@ class Banco:
         ficha.set_nome(nome_cliente)
         ficha.set_cpf(cpf_cliente)
         self.__fichario[self.__ultima_conta_criada] = ficha
-        # return self.__ultima_conta_criada # nesse ponto não está sendo desprotegido o atributo do banco?
-        self.__ultima_conta_criada
+
         return True, ficha.get_nome(), ficha.get_numero()
 
     def deposito(self, numero_conta, valor):
@@ -44,24 +43,24 @@ class Banco:
             return True
         else:
             return False
-    
+
     def transferencia(self, nct_origem, nct_destino, valor):
         ''' Realiza transferência entre duas contas '''
         
-        if nct_origem in self.__fichario and nct_destino in self.__fichario:
-            ficha_origem = self.__fichario[nct_origem]
-            ficha_destino = self.__fichario[nct_destino]
+        if nct_origem not in self.__fichario:
+            return False, "Conta de origem não existe"
+        if nct_destino not in self.__fichario:
+            return False, "Conta de destino não existe"
 
-            ficha_origem.debite(valor)
-            ficha_destino.credite(valor)
+        ficha_origem = self.__fichario[nct_origem]
+        ficha_destino = self.__fichario[nct_destino]
 
-            msg = f"Transferencia realizada com sucesso: R${valor} de {ficha_origem.get_nome()} para {ficha_destino.get_nome()}"
+        ficha_origem.debite(valor)
+        ficha_destino.credite(valor)
 
-            return True, msg
-        else:
-            return False, "Falha na transferencia"
+        return True, f"Transferencia realizada com sucesso"
 
-    def saldo(self, numero_conta):       
+    def saldo(self, numero_conta):
         ''' Obtém o saldo de uma conta '''
         
         if numero_conta in self.__fichario:
@@ -69,7 +68,7 @@ class Banco:
         else:
             return False
 
-    def verifica_situacao(self, numero_conta):
+    def mostra_situacao_da_conta(self, numero_conta):
         nome = self.__fichario[numero_conta].get_nome()
         situacao = self.__fichario[numero_conta].get_situacao()
         saldo = self.saldo(numero_conta)

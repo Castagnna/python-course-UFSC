@@ -8,7 +8,7 @@ class FichaBancaria:
         self.__situacao = 'ativada'
     
     def get_numero(self):
-        return self.__numero # nesse ponto não está sendo desprotegido o atributo da ficha?
+        return self.__numero
     
     def get_nome(self):
         return self.__nome[:]
