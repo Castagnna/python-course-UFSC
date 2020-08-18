@@ -77,7 +77,7 @@ print(f"Saque: {saque}" if status_da_operacao else "Falha no saque")
 nome, sit, saldo = caixa_eletronico.mostra_situacao_da_conta(numero_conta=1)
 print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
 
-status_da_operacao, saque = caixa_eletronico.saque_de_cedulas(numero_conta=1, valor=299)
+status_da_operacao, saque = caixa_eletronico.saque_de_cedulas(numero_conta=1, valor=99)
 print(f"Saque: {saque}")
 
 nome, sit, saldo = caixa_eletronico.mostra_situacao_da_conta(numero_conta=1)

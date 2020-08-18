@@ -56,8 +56,9 @@ class CaixaEletronico:
         qtd_de_cedulas_do_saque = [0] * qtd_cedulas_distintas_do_caixa
 
         for i in range(qtd_cedulas_distintas_do_caixa - 1, -1, -1):
-            qtd_de_cedulas_do_saque[i] = int(min(valor // cedulas_do_caixa[i], self.__cedulas_e_qtd[cedulas_do_caixa[i]]))
-            self.__cedulas_e_qtd[cedulas_do_caixa[i]] -= qtd_de_cedulas_do_saque[i]
+            cedula = cedulas_do_caixa[i]
+            qtd_de_cedulas_do_saque[i] = int(min(valor // cedula, self.__cedulas_e_qtd[cedula]))
+            self.__cedulas_e_qtd[cedula] -= qtd_de_cedulas_do_saque[i]
             valor -= cedulas_do_caixa[i] * qtd_de_cedulas_do_saque[i]
 
         return True, [[cedula, qtd] for cedula, qtd in zip(cedulas_do_caixa, qtd_de_cedulas_do_saque) if qtd > 0]
