@@ -21,7 +21,13 @@ class CaixaEletronico:
     def mostra_cedulas_e_quantidades(self):
         return [[cedula, self.__cedulas_e_qtd[cedula]] for cedula in sorted(self.__cedulas_e_qtd.keys())]
 
-    def saque(self, numero_conta, valor):  # retirar o cx da frente do saque
+    def valor_total_em_caixa(self):
+        valor = 0
+        for cedula, qtd in self.__cedulas_e_qtd.items():
+            valor += cedula*qtd
+        return valor
+
+    def saque(self, numero_conta, valor):
         return self.__banco.saque(numero_conta, valor)
 
     def deposito(self, numero_conta, valor):
@@ -36,30 +42,40 @@ class CaixaEletronico:
     def saldo(self, numero_conta):
         return self.__banco.saldo(numero_conta)
 
-    def verifica_cedulas_para_o_saque(self, valor):
-        return True
+    def tenta_sacar(self, valor):
+
+        qtd_cedulas_distintas_no_caixa = len(self.__cedulas_e_qtd)
+
+        cedulas_no_caixa = sorted(self.__cedulas_e_qtd.keys())
+
+        qtd_de_cedulas_do_saque = [0] * qtd_cedulas_distintas_no_caixa
+
+        for i in range(qtd_cedulas_distintas_no_caixa - 1, -1, -1):
+            cedula = cedulas_no_caixa[i]
+            qtd_de_cedulas_do_saque[i] = int(min(valor // cedula, self.__cedulas_e_qtd[cedula]))
+            self.__cedulas_e_qtd[cedula] -= qtd_de_cedulas_do_saque[i]
+            valor -= cedula * qtd_de_cedulas_do_saque[i]
+
+        valor_restante = valor
+        if valor_restante == 0:
+            saque = [[nota, qtd] for nota, qtd in zip(cedulas_no_caixa, qtd_de_cedulas_do_saque) if qtd > 0]
+            return True, saque, valor_restante
+        else:
+            return False, [None], valor_restante
 
     def saque_de_cedulas(self, numero_conta, valor):
-
-        if not self.verifica_cedulas_para_o_saque(valor):
-            return False, "Quantidade de cedulas insuficiente para o saque"
 
         if self.saldo(numero_conta) < valor:
             return False, "Saldo insuficiente"
 
+        valor_em_caixa = self.valor_total_em_caixa()
+        if valor_em_caixa < valor:
+            return False, "Saque maior que o valor total em caixa. Limite do saque {}".format(valor_em_caixa)
+
+        saque_valido, saque, valor_restante = self.tenta_sacar(valor)
+        if not saque_valido:
+            return False, "Notas disponiveis não fecham com o valor do saque, diferença: R$ {}.".format(valor_restante)
+
         self.__banco.saque(numero_conta, valor)
 
-        qtd_cedulas_distintas_do_caixa = len(self.__cedulas_e_qtd)
-
-        cedulas_do_caixa = sorted(self.__cedulas_e_qtd.keys())
-
-        qtd_de_cedulas_do_saque = [0] * qtd_cedulas_distintas_do_caixa
-
-        for i in range(qtd_cedulas_distintas_do_caixa - 1, -1, -1):
-            cedula = cedulas_do_caixa[i]
-            qtd_de_cedulas_do_saque[i] = int(min(valor // cedula, self.__cedulas_e_qtd[cedula]))
-            self.__cedulas_e_qtd[cedula] -= qtd_de_cedulas_do_saque[i]
-            valor -= cedulas_do_caixa[i] * qtd_de_cedulas_do_saque[i]
-
-        return True, [[cedula, qtd] for cedula, qtd in zip(cedulas_do_caixa, qtd_de_cedulas_do_saque) if qtd > 0]
-
+        return True, saque

@@ -17,7 +17,7 @@ print(f"{nome}, conta N° {numero} criada com sucesso" if status_da_operacao els
 status_da_operacao, nome, numero = itopobre.abre_conta('O Cão', 666)
 print(f"{nome}, conta N° {numero} criada com sucesso" if status_da_operacao else "falha na operacao")
 
-itopobre.deposito(numero_conta=1, valor=100)
+itopobre.deposito(numero_conta=1, valor=4000)
 itopobre.deposito(numero_conta=2, valor=250)
 itopobre.deposito(numero_conta=3, valor=1000)
 itopobre.saque(numero_conta=1, valor=50)
@@ -55,6 +55,8 @@ caixa_eletronico.abastece_o_caixa(cedulas)
 situacao_do_caixa = caixa_eletronico.mostra_cedulas_e_quantidades()
 print(f"situacao do caixa: {situacao_do_caixa}")
 
+print(f"Valor do caixa: {caixa_eletronico.valor_total_em_caixa()}")
+
 caixa_eletronico.saque(numero_conta=1, valor=10)
 nome, sit, saldo = caixa_eletronico.mostra_situacao_da_conta(numero_conta=1)
 print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
@@ -77,7 +79,13 @@ print(f"Saque: {saque}" if status_da_operacao else "Falha no saque")
 nome, sit, saldo = caixa_eletronico.mostra_situacao_da_conta(numero_conta=1)
 print(f"Situação da conta de {nome}: {sit}, saldo: R$ {saldo}")
 
-status_da_operacao, saque = caixa_eletronico.saque_de_cedulas(numero_conta=1, valor=99)
+status_da_operacao, saque = caixa_eletronico.saque_de_cedulas(numero_conta=1, valor=98)
+print(f"Saque: {saque}")
+
+status_da_operacao, saque = caixa_eletronico.saque_de_cedulas(numero_conta=1, valor=5000)
+print(f"Saque: {saque}")
+
+status_da_operacao, saque = caixa_eletronico.saque_de_cedulas(numero_conta=1, valor=4000)
 print(f"Saque: {saque}")
 
 nome, sit, saldo = caixa_eletronico.mostra_situacao_da_conta(numero_conta=1)
