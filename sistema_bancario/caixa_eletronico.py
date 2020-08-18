@@ -49,14 +49,16 @@ class CaixaEletronico:
 
         self.__banco.saque(numero_conta, valor)
 
-        qtd_cedulas_distintas = len(self.__cedulas)
+        qtd_cedulas_distintas_do_caixa = len(self.__cedulas_e_qtd)
 
-        qtd_de_cedulas_do_saque = [0] * qtd_cedulas_distintas
+        cedulas_do_caixa = sorted(self.__cedulas_e_qtd.keys())
 
-        for i in range(qtd_cedulas_distintas - 1, -1, -1):
-            qtd_de_cedulas_do_saque[i] = int(min(valor // self.__cedulas[i], self.__qtd_de_cada_cedula_do_caixa[i]))
-            self.__qtd_de_cada_cedula_do_caixa[i] -= qtd_de_cedulas_do_saque[i]
-            valor -= self.__cedulas[i] * qtd_de_cedulas_do_saque[i]
+        qtd_de_cedulas_do_saque = [0] * qtd_cedulas_distintas_do_caixa
 
-        return True, [[cedula, qtd] for cedula, qtd in zip(self.__cedulas, qtd_de_cedulas_do_saque) if qtd > 0]
+        for i in range(qtd_cedulas_distintas_do_caixa - 1, -1, -1):
+            qtd_de_cedulas_do_saque[i] = int(min(valor // cedulas_do_caixa[i], self.__cedulas_e_qtd[cedulas_do_caixa[i]]))
+            self.__cedulas_e_qtd[cedulas_do_caixa[i]] -= qtd_de_cedulas_do_saque[i]
+            valor -= cedulas_do_caixa[i] * qtd_de_cedulas_do_saque[i]
+
+        return True, [[cedula, qtd] for cedula, qtd in zip(cedulas_do_caixa, qtd_de_cedulas_do_saque) if qtd > 0]
 

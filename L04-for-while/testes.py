@@ -39,8 +39,5 @@
 
 # for cedula, qtd in zip(['A', 'B', 'C'], [1, 2, 3]):
 #     print(cedula, qtd)
-a = [9, 7, 11, 99]
-
-print(a.index(99))
-(a.append(13)).sort()
-print(a)
+a = {1:2, 3:4, 4:5}
+print(len(a))
