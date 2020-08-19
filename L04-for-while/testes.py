@@ -39,5 +39,23 @@
 
 # for cedula, qtd in zip(['A', 'B', 'C'], [1, 2, 3]):
 #     print(cedula, qtd)
-a = {1:2, 3:4, 4:5}
-print(len(a))
+def soma(x, y, z):
+    return x + y + z
+
+
+def multiplica(x, y, z):
+    return x + y + z
+
+
+operacoes = {
+    "soma": soma,
+    "multiplica": multiplica,
+}
+
+operacao = operacoes["soma"]
+
+valores = [2, 3, 5]
+
+r = operacao(*valores)
+
+print(r)
